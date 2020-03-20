@@ -20,21 +20,37 @@ public class alienDictionary {
 		return false;
 	}
 
-	public void addWord (String alienWord, String translation) {
+	public void addWord (String alienWord, List<String> traduzione) {
+		boolean errato=false;
 		if (this.equals(alienWord)==false) {
-			if (alienWord.matches("[a-zA-Z]*") && translation.matches("[a-zA-Z]*")) {
-				word parola = new word (alienWord, translation);
-				dizionario.add(parola);}
-			else {
-				throw new InvalidParameterException();}
+			if (alienWord.matches("[a-zA-Z]*")==false) {
+				throw new InvalidParameterException();
+				}
+			for (int i = traduzione.size()-1; i >= 0; i--) {
+				if(traduzione.get(i).matches("[a-zA-Z]*")==false) {
+					errato=true;
+					traduzione.remove(traduzione.get(i));}
 			}
-		if (this.equals(alienWord)==true) {
+			if (traduzione.size()!=0) {
+				word parola = new word (alienWord, traduzione);
+				dizionario.add(parola);}
+			if (errato == true)
+				throw new IllegalStateException();
+		}
+		else {
+			for (int i = traduzione.size()-1; i >= 0; i--) {
+				if(traduzione.get(i).matches("[a-zA-Z]*")==false) {
+					errato=true;
+					traduzione.remove(traduzione.get(i));}
+			}
 			for (word w : dizionario) {
 				if (w.getAlienWord().compareTo(alienWord)==0)
-					w.setTranslate(translation);
+					w.addTranslate(traduzione);
+			}
+			if (errato == true)
+				throw new IllegalStateException();
 			}
 	}
-}
 	
 	public String translateWord (String alienWord) {
 		for (word w : dizionario) {

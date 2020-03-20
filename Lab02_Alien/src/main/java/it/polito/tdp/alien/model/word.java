@@ -1,9 +1,12 @@
 package it.polito.tdp.alien.model;
 
+import java.util.Collection;
+import java.util.List;
+
 public class word {
 	
 	private String alienWord;
-	private String translate;
+	private Collection<String> translate;
 	
 	
 	/**
@@ -13,7 +16,7 @@ public class word {
 	 */
 	
 	
-	public word(String alienWord, String translate) {
+	public word(String alienWord, Collection<String> translate) {
 		super();
 		this.alienWord = alienWord;
 		this.translate = translate;
@@ -31,12 +34,16 @@ public class word {
 
 
 	public String getTranslate() {
-		return translate;
+		String s="";
+		for (String ss : translate) {
+			s+=ss+"\n";
+		}
+		return s;
 	}
 
-
-	public void setTranslate(String translate) {
-		this.translate = translate;
+	public void addTranslate(Collection<String> translation) {
+		this.translate.addAll(translation);
 	}
+	
 
 }

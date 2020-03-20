@@ -3,7 +3,12 @@ package it.polito.tdp.alien;
 import it.polito.tdp.alien.model.*;
 import java.net.URL;
 import java.security.InvalidParameterException;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -36,35 +41,42 @@ public class FXMLController {
     void doReset(ActionEvent event) {
     	txtInserisci.clear();
     	txtTraduzione.clear();
+    	dizionario.getDizionario().clear();
     }
 
     @FXML
     void doTranslate(ActionEvent event) {
+    		String risultato="";
     		String alien="";
-    		String traduzione="";
+    		List<String> traduzione=new LinkedList<>();
     		String parola [] = txtInserisci.getText().toLowerCase().split(" ");
     		for (String s : parola) {
     			if (s.compareTo("")!=0 && alien.compareTo("")==0) 
     				alien = s;
     			else if (s.compareTo("")!=0 && alien.compareTo("")!=0) 
-    				traduzione = s;
+    				traduzione.add(s);
     				}
-    		if (traduzione.compareTo("")!=0) {
+    		if (traduzione.size()!=0) {
     			try {
     				dizionario.addWord(alien, traduzione);
     				txtTraduzione.setText("Parole aggiunte al dizionario");
     		}
     			catch (InvalidParameterException e) {
-    				txtTraduzione.setText("Le parole devono contenere solo lettere");
+    				txtTraduzione.setText("La parola aliena deve contenere solo lettere");
+    				txtInserisci.clear();
+    				return;
+    			}
+    			catch (IllegalStateException e) {
+    				txtTraduzione.setText("alcune traduzioni non sono state aggiunte perchè non contengono solo lettere");
     				txtInserisci.clear();
     				return;
     			}
     		}
-    		if (traduzione.compareTo("")==0) {
-    			traduzione=dizionario.translateWord(alien);
-    			if(traduzione==null)
-    				traduzione="La parola non è presente nel dizionario";
-    			txtTraduzione.setText(traduzione);
+    		if (traduzione.size()==0) {
+    			risultato=dizionario.translateWord(alien);
+    			if(risultato==null)
+    				risultato="La parola non è presente nel dizionario";
+    			txtTraduzione.setText(risultato);
     		}
     		txtInserisci.clear();
     }
