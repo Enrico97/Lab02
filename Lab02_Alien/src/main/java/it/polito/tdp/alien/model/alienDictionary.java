@@ -1,14 +1,19 @@
 package it.polito.tdp.alien.model;
 
 import java.security.InvalidParameterException;
-import java.util.LinkedList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class alienDictionary {
 	
-	List <word> dizionario = new LinkedList<>();
+	Set <word> dizionario = new LinkedHashSet<>();
+	Set <String> traduzione1 = new HashSet<>();
 
-	public List<word> getDizionario() {
+
+	public Collection<word> getDizionario() {
 		return dizionario;
 	}
 	
@@ -32,7 +37,8 @@ public class alienDictionary {
 					traduzione.remove(traduzione.get(i));}
 			}
 			if (traduzione.size()!=0) {
-				word parola = new word (alienWord, traduzione);
+				traduzione1.addAll(traduzione);
+				word parola = new word (alienWord, traduzione1);
 				dizionario.add(parola);}
 			if (errato == true)
 				throw new IllegalStateException();
